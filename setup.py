@@ -39,6 +39,25 @@ def find_version(*file_paths):
     raise RuntimeError("Unable to find version string.")
 
 
+if os.name != "nt":
+    scripts = [
+        'esptool.py',
+        'espefuse.py',
+        'espsecure.py'
+    ]
+    entry_points = {}
+else:
+    scripts = []
+    entry_points = {
+        "console_scripts": [
+            "esptool.py=esptool.__init__:_main",
+            "espsecure.py=espsecure.__init__:_main",
+            "espefuse.py=espefuse.__init__:_main",
+        ],
+    }
+
+
+
 long_description = """
 ==========
 esptool.py
@@ -119,11 +138,6 @@ setup(
         "reedsolo>=1.5.3,<=1.5.4",
     ],
     packages=find_packages(),
-    entry_points={
-        "console_scripts": [
-            "esptool=esptool.__init__:_main",
-            "espsecure=espsecure.__init__:_main",
-            "espefuse=espefuse.__init__:_main",
-        ],
-    },
+    entry_points=entry_points,
+    scripts=scripts
 )
